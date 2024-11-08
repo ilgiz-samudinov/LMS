@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Library - Add/Edit Book</title>
+    <style>
+        /* Основные стили страницы */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Контейнер формы */
+        .form-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Заголовок */
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        /* Поля формы */
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Кнопка сохранения */
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Ссылка на список книг */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h1 th:text="${book.id != null ? 'Edit Book' : 'Add New Book'}"></h1>
+
+    <form th:object="${book}"
+          th:action="@{${book.id != null ? '/book/edit/' + book.id : '/book/new'}}" method="post">
+
+        <!-- Поле ID (только для чтения при редактировании) -->
+        <label for="id">ID</label>
+        <input type="text" th:field="*{id}" id="id" th:readonly="${book.id != null}"/>
+
+        <!-- Поле Название книги -->
+        <label for="title">Title</label>
+        <input type="text" th:field="*{title}" id="title" required/>
+
+        <!-- Поле Автор книги -->
+        <label for="author">Author</label>
+        <input type="text" th:field="*{author}" id="author" required/>
+
+        <!-- Поле Жанр книги -->
+        <label for="genre">Genre</label>
+        <input type="text" th:field="*{genre}" id="genre" required/>
+
+        <!-- Поле Статус книги -->
+        <label for="status">Status</label>
+        <select id="status" name="status" th:field="*{status}">
+            <option value="available" th:selected="${book.status == 'available'}">Available</option>
+            <option value="issued" th:selected="${book.status == 'issued'}">Issued</option>
+        </select>
+
+        <!-- Кнопка отправки формы -->
+        <input type="submit" th:value="Save"/>
+    </form>
+
+    <!-- Ссылка для возврата к списку книг -->
+    <a th:href="@{/book/all}" class="back-link">Back to Book List</a>
+</div>
+</body>
+</html>
